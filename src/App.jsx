@@ -20,7 +20,6 @@ function App() {
   const [isGameWon, setIsGameWon] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [scores, setScores] = useState({ score: 0, highScore: 0 }); // Calculate score based on answers
-  const [isGameReset, setIsGameReset] = useState(false); // State to track game reset
 
   //Fetch characters from Rick and Morty API
   useEffect(() => {
@@ -36,7 +35,7 @@ function App() {
         const data = await response.json();
         setCharacters(
           data.results.sort(() => Math.random() - 0.5).slice(0, 12),
-        ); // Shuffle characters
+        );
         setStatus("level");
       } catch (error) {
         setStatus("error");
@@ -72,6 +71,15 @@ function App() {
     }
   }
 
+  //Restart level
+  function restartLevel() {
+    setIsGameWon(null);
+    setIsModalOpen(false);
+    setAnswers([]);
+    setScores({ ...scores, score: 0 }); // Reset score
+    handleShuffleCards(); // Shuffle cards again
+  }
+
   function handleShuffleCards() {
     setCharacters((characters) => {
       const shuffled = [...characters];
@@ -92,7 +100,7 @@ function App() {
   function handlePlayMusic() {
     if (!audioRef.current) {
       //If audioRef is null, assign new Audio
-      audioRef.current = new Audio("/audio/background.mp3");
+      audioRef.current = new Audio("/audio/background_music.mp3");
       audioRef.current.volume = 0.07; // Set volume to 7%
       audioRef.current.loop = true;
     }
@@ -119,7 +127,7 @@ function App() {
       {status === "level" && <Difficulty onSetDifficulty={gameStart} />}
       {status === "success" && (
         <>
-          <Logo />
+          <Logo onClick={() => window.location.reload()} />
           <Instruction />
           <Scoreboard scores={scores} />
           {/* Card container */}
@@ -158,7 +166,7 @@ function App() {
             <Button onClick={() => window.location.reload()}>
               <FaHouse size={60} />
             </Button>
-            <Button>
+            <Button onClick={restartLevel}>
               <FaArrowRotateLeft size={60} />
             </Button>
           </div>
