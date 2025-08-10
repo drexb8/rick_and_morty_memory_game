@@ -1,0 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Charm:wght@400;700&family=Creepster&display=swap");
+
+@import "tailwindcss";
+
+@layer utilities {
+  @keyframes scale-up {
+    0% {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .animate-scale-up {
+    animation: scale-up 0.3s ease-out forwards;
+  }
+}
+
+@theme {
+  --font-creepster: Creepster, "sans-serif";
+}
